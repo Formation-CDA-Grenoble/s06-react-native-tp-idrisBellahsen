@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import axios from 'axios';
-import data from '../data'
+
 
 export default class PersonList extends Component {
    
     constructor(props) {
         super(props);
         this.state = {
-          imageURL: '',
+          data: null,
         }
       }
 
   componentDidMount() {
-    axios.get('https://dog.ceo/api/breeds/image/random')
+    axios.get('https://randomuser.me/api/')
     .then(response => {
-      this.setState({ imageURL: response.data.message });
-      console.log("didmount");
+    this.setState({ data: response.data });
+
     })
     .catch(error => {
       console.log(error);
@@ -25,13 +25,27 @@ export default class PersonList extends Component {
 
 
 
-
     render() {
-        const { imageURL } = this.state;
-        console.log(imageURL);
+        const {data}= this.state
+
+        //Important
+        if (data=== null){
+
+            return <Text>Text Loading...</Text>
+        }
+
+        const person = data.results[0] 
+
+
         return (
-            <Image source={{uri: imageURL }}  style={{width: 500, height: 580}}></Image>
+            <View style = {{flex: 1,
+            backgroundColor: '#fff',
+             alignItems: 'center',
+            justifyContent: 'center'}}>
+             <Text>{person.name.first}</Text>
+            </View>
           
         );
       }
+      
 }
